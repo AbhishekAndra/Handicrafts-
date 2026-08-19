@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - CraftMarket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .cart-items {
+            background-color: var(--white);
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--light-bg), var(--border-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .item-details p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .item-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .quantity-control button {
+            background-color: var(--light-bg);
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .quantity-control button:hover {
+            background-color: var(--border-color);
+        }
+
+        .quantity-control input {
+            border: none;
+            width: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--error-color);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .remove-btn:hover {
+            color: oklch(0.58 0.12 29.983);
+        }
+
+        .cart-summary {
+            background-color: var(--light-bg);
+            padding: 30px;
+            border-radius: 8px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid var(--border-color);
+            padding-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 60px;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .coupon-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .coupon-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .coupon-input::placeholder {
+            color: var(--text-light);
+        }
+
+        .coupon-hint {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .coupon-applied {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background-color: oklch(0.94 0.03 132);
+            color: var(--success-color);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .coupon-applied button {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 15px;
+            }
+
+            .item-image {
+                width: 80px;
+                height: 80px;
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Shop</a>
+                    <a href="seller-dashboard.html" class="nav-link">Sell</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <section style="padding: 40px 20px; background-color: var(--light-bg); text-align: center;">
+        <h1 style="font-size: 32px; margin-bottom: 10px;">Shopping Cart</h1>
+    </section>
+
+    <!-- Cart Section -->
+    <div class="container" id="cart-content">
+        <div class="cart-container" id="cart-container">
+            <!-- Cart content loaded by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top: 60px;">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link">
+                    <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="seller-dashboard.html">Become a Seller</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        function loadCart() {
+            const container = document.getElementById('cart-container');
+            const cart = getCart();
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h2>Your cart is empty</h2>
+                        <p>Start shopping for beautiful handcrafted items</p>
+                        <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            const { subtotal, discount, shipping, tax, total, coupon } = getCartTotals('standard');
+
+            let cartHTML = '<div class="cart-items">';
+
+            cart.forEach(item => {
+                cartHTML += `
+                    <div class="cart-item">
+                        <div class="item-image">${productImageMarkup(item)}</div>
+                        <div class="item-details">
+                            <h3><a href="product-details.html?id=${item.id}" style="color: inherit; text-decoration: none;">${item.name}</a></h3>
+                            <p>by ${item.seller}</p>
+                            <div class="item-price">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+                            <div class="quantity-control">
+                                <button onclick="updateQuantity(${item.id}, ${item.quantity - 1})">−</button>
+                                <input type="number" value="${item.quantity}" readonly>
+                                <button onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                            </div>
+                            <div style="font-weight: bold;">$${(item.price * item.quantity).toFixed(2)}</div>
+                            <button class="remove-btn" onclick="removeItem(${item.id})" title="Remove">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const couponHTML = coupon
+                ? `<div class="coupon-applied">
+                        <span><i class="fas fa-tag"></i> <strong>${coupon.code}</strong> — ${coupon.label}</span>
+                        <button onclick="removeCoupon()" title="Remove coupon">&times;</button>
+                   </div>`
+                : `<input type="text" class="coupon-input" placeholder="Enter coupon code" id="coupon-input">
+                   <button class="btn btn-secondary" style="width: 100%;" onclick="submitCoupon()">Apply Coupon</button>
+                   <p class="coupon-hint">Try <strong>CRAFT10</strong>, <strong>HANDMADE20</strong>, <strong>WELCOME5</strong> or <strong>FREESHIP</strong></p>`;
+
+            cartHTML += `</div>
+                <div class="cart-summary">
+                    <div class="coupon-section">
+                        ${couponHTML}
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>$${subtotal.toFixed(2)}</span>
+                    </div>
+                    ${discount > 0 ? `
+                    <div class="summary-row" style="color: var(--success-color);">
+                        <span>Discount:</span>
+                        <span>−$${discount.toFixed(2)}</span>
+                    </div>` : ''}
+                    <div class="summary-row">
+                        <span>Shipping:</span>
+                        <span>${shipping === 0 ? 'Free' : '$' + shipping.toFixed(2)}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tax (10%):</span>
+                        <span>$${tax.toFixed(2)}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span>$${total.toFixed(2)}</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 15px;" onclick="proceedToCheckout()">
+                        <i class="fas fa-lock"></i> Proceed to Checkout
+                    </button>
+                    <a href="products.html" class="btn btn-outline" style="width: 100%; margin-top: 10px; text-align: center;">Continue Shopping</a>
+                </div>
+            `;
+
+            container.innerHTML = cartHTML;
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeItem(productId);
+            } else {
+                updateCartQuantity(productId, newQuantity);
+                loadCart();
+            }
+        }
+
+        function removeItem(productId) {
+            removeFromCart(productId);
+            loadCart();
+            showNotification('Item removed from cart', 'info');
+        }
+
+        function submitCoupon() {
+            const input = document.getElementById('coupon-input');
+            const applied = applyCouponCode(input.value);
+
+            if (!applied) {
+                showNotification('That coupon code is not valid', 'error');
+                return;
+            }
+
+            showNotification(`Coupon applied — ${applied.label}`, 'success');
+            loadCart();
+        }
+
+        function removeCoupon() {
+            clearCoupon();
+            showNotification('Coupon removed', 'info');
+            loadCart();
+        }
+
+        function proceedToCheckout() {
+            window.location.href = 'checkout.html';
+        }
+
+        // Initial load
+        loadCart();
+    </script>
+</body>
+</html>

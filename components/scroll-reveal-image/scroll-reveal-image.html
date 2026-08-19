@@ -1,0 +1,36 @@
+<!--
+  Scroll Reveal Image — reusable markup snippet
+  ------------------------------------------------------------
+  Copy this block wherever you want the effect. Every data-*
+  attribute is optional (defaults shown below); JS reads them
+  automatically, so each instance on a page can be configured
+  independently without touching scroll-reveal-image.js.
+
+  Requires, once per page:
+    <link rel="stylesheet" href="/components/scroll-reveal-image/scroll-reveal-image.css">
+    <script src="/components/scroll-reveal-image/scroll-reveal-image.js" defer></script>
+  (adjust the path depth for pages inside subfolders, e.g. ../components/... )
+-->
+
+<div
+  class="scroll-reveal-image"
+  data-height="80vh"
+  data-from-width="40%"
+  data-to-width="95%"
+  data-from-radius="0px"
+  data-to-radius="22px"
+  data-radius-start="0.5"
+  data-inner-width="95%"
+  data-from-scale="1.6"
+  data-to-scale="1"
+  data-stiffness="120"
+  data-damping="80"
+>
+  <div class="scroll-reveal-image-inner">
+    <img
+      src="IMAGE_URL"
+      alt="Describe what is actually shown in the image"
+      loading="lazy"
+    />
+  </div>
+</div>

@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - CraftMarket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .products-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .filter-section {
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .filter-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .filter-option input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+        }
+
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-range input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .price-display {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .products-main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sort-select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .no-results i {
+            font-size: 60px;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .active-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .active-filter {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--white);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .active-filter button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* ---------- Side ad rail ----------
+           Only shown when the viewport is wide enough to leave dead space
+           beside the centered .container (max-width: 1200px). Purely a
+           house-ad placeholder — not a real ad network. */
+        .side-ad {
+            display: none;
+        }
+
+        @media (min-width: 1600px) {
+            .side-ad {
+                display: block;
+                position: fixed;
+                left: 24px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 220px;
+                border-radius: var(--radius-lg);
+                overflow: hidden;
+                box-shadow: var(--shadow-lg);
+                z-index: 50;
+                background-color: var(--dark-bg);
+            }
+
+            .side-ad-label {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                z-index: 2;
+                background: rgba(0, 0, 0, 0.5);
+                color: rgba(255, 255, 255, 0.85);
+                font-size: 10px;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                padding: 3px 8px;
+                border-radius: 20px;
+            }
+
+            .side-ad-close {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                z-index: 2;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                border: none;
+                background: rgba(0, 0, 0, 0.5);
+                color: var(--white);
+                cursor: pointer;
+                font-size: 13px;
+                line-height: 1;
+            }
+
+            .side-ad video {
+                display: block;
+                width: 100%;
+                height: 320px;
+                object-fit: cover;
+            }
+
+            .side-ad-body {
+                position: relative;
+                padding: 16px 16px 20px;
+                color: var(--white);
+                text-align: center;
+                background: linear-gradient(180deg, rgba(0,0,0,0.15), var(--dark-bg));
+            }
+
+            .side-ad-body span {
+                display: block;
+                font-size: 11px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: var(--secondary-color);
+                margin-bottom: 6px;
+            }
+
+            .side-ad-body h4 {
+                font-family: var(--font-serif);
+                font-size: 18px;
+                margin-bottom: 4px;
+            }
+
+            .side-ad-body p {
+                font-size: 12px;
+                color: #ccc;
+                margin-bottom: 14px;
+            }
+
+            .side-ad-body .btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        /* ==================================================================
+           SHOP LANDING — hero / about / popular picks / trust bar
+           Accent reuses the site's actual primary/secondary tokens so this
+           section matches the rest of CraftMarket instead of introducing a
+           one-off color.
+           ================================================================== */
+        :root {
+            --shop-gold: var(--primary-color);
+            --shop-gold-dark: color-mix(in oklch, var(--primary-color) 80%, black);
+        }
+
+        .shop-hero {
+            position: relative;
+            min-height: 640px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            color: var(--white);
+            background-color: var(--dark-bg);
+        }
+
+        .shop-hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+
+        .shop-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(100deg, rgba(15, 10, 6, 0.94) 0%, rgba(15, 10, 6, 0.75) 45%, rgba(15, 10, 6, 0.35) 100%);
+        }
+
+        .shop-hero-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 90px 20px 60px;
+        }
+
+        .shop-hero-eyebrow {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--shop-gold);
+            font-size: 17px;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .shop-hero-content h1 {
+            font-family: var(--font-serif);
+            font-size: 46px;
+            line-height: 1.15;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        .shop-hero-content h1 span {
+            color: var(--shop-gold);
+        }
+
+        .shop-hero-content p {
+            font-size: 16px;
+            color: #d8d0c8;
+            max-width: 460px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .shop-hero-actions {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 44px;
+            flex-wrap: wrap;
+        }
+
+        .shop-btn-gold {
+            background-color: var(--shop-gold);
+            color: var(--white);
+            border: none;
+            padding: 14px 26px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .shop-btn-gold:hover {
+            background-color: var(--shop-gold-dark);
+        }
+
+        .shop-btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 14px 26px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .shop-btn-outline:hover {
+            border-color: var(--white);
+        }
+
+        .shop-hero-perks {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .shop-hero-perks div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #d8d0c8;
+        }
+
+        .shop-hero-perks i {
+            color: var(--shop-gold);
+            font-size: 18px;
+        }
+
+        .shop-hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shop-hero-image img {
+            width: 100%;
+            max-width: 340px;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ---------- About band ---------- */
+        .shop-about {
+            background-color: var(--dark-bg);
+            color: var(--white);
+            padding: 70px 20px;
+        }
+
+        .shop-about-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .shop-about-image img {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .shop-about-eyebrow {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--shop-gold);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .shop-about h2 {
+            font-family: var(--font-serif);
+            font-size: 34px;
+            margin-bottom: 18px;
+        }
+
+        .shop-about h2 span {
+            color: var(--shop-gold);
+        }
+
+        .shop-about > .shop-about-grid > div > p {
+            color: #d8d0c8;
+            line-height: 1.9;
+            margin-bottom: 24px;
+        }
+
+        .shop-about-list {
+            list-style: none;
+            margin-bottom: 28px;
+        }
+
+        .shop-about-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #ece7e0;
+        }
+
+        .shop-about-list i {
+            color: var(--shop-gold);
+        }
+
+        /* ---------- Popular Picks ---------- */
+        .shop-picks {
+            background-color: var(--dark-bg);
+            color: var(--white);
+            padding: 20px 20px 70px;
+            text-align: center;
+        }
+
+        .shop-picks-eyebrow {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--shop-gold);
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .shop-picks h2 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            margin-bottom: 36px;
+        }
+
+        .shop-picks-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 24px;
+        }
+
+        .pick-card {
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            text-align: left;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .pick-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--shop-gold);
+        }
+
+        .pick-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .pick-card-body {
+            padding: 16px;
+        }
+
+        .pick-card-body h4 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .pick-card-body p {
+            font-size: 12px;
+            color: #a89e93;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .pick-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pick-card-footer .price {
+            color: var(--shop-gold);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .pick-add-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--shop-gold);
+            color: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .pick-add-btn:hover {
+            background-color: var(--shop-gold-dark);
+        }
+
+        .shop-picks-more {
+            margin-top: 36px;
+        }
+
+        /* ---------- Trust bar (dark) ---------- */
+        .shop-trust-bar {
+            background-color: #150e08;
+            padding: 30px 20px;
+        }
+
+        .shop-trust-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .shop-trust-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 14px 18px;
+        }
+
+        .shop-trust-item i {
+            color: var(--shop-gold);
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .shop-trust-item h5 {
+            font-size: 13px;
+            color: var(--white);
+            margin-bottom: 2px;
+        }
+
+        .shop-trust-item p {
+            font-size: 11px;
+            color: #a89e93;
+            margin: 0;
+        }
+
+        /* ---------- Catalog transition heading ---------- */
+        .shop-catalog-heading {
+            text-align: center;
+            padding: 50px 20px 0;
+        }
+
+        .shop-catalog-heading span {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: var(--primary-color);
+            font-size: 15px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .shop-catalog-heading h2 {
+            font-size: 30px;
+            color: var(--text-dark);
+        }
+
+        @media (max-width: 900px) {
+            .shop-hero-grid,
+            .shop-about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .shop-hero-image {
+                order: -1;
+            }
+
+            .shop-hero-content h1 {
+                font-size: 34px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- House ad — fills the dead space beside the centered layout on very wide screens.
+         Picks a random category + matching video on each load; see #side-ad script below. -->
+    <aside class="side-ad" id="side-ad">
+        <span class="side-ad-label">Advertisement</span>
+        <button class="side-ad-close" id="side-ad-close" aria-label="Close ad" title="Close ad">&times;</button>
+        <video id="side-ad-video" autoplay muted loop playsinline poster="../assets/images/hero-poster.webp">
+            <source id="side-ad-video-source" src="" type="video/mp4">
+        </video>
+        <div class="side-ad-body">
+            <span>Limited Time</span>
+            <h4 id="side-ad-headline"></h4>
+            <p id="side-ad-text"></p>
+            <a href="products.html" id="side-ad-cta" class="btn btn-primary">Shop The Sale</a>
+        </div>
+    </aside>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link active">Shop</a>
+                    <a href="seller-dashboard.html" class="nav-link">Sell</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shop Hero -->
+    <section class="shop-hero">
+        <video class="shop-hero-bg" autoplay muted loop playsinline poster="../assets/images/hero-poster.webp">
+            <source src="../assets/videos/hero-pottery.mp4" type="video/mp4">
+        </video>
+        <div class="shop-hero-overlay"></div>
+        <div class="shop-hero-grid">
+            <div class="shop-hero-content">
+                <p class="shop-hero-eyebrow">Handmade. Honest. Yours.</p>
+                <h1>Shop Crafts Like<br>Never <span>Before</span></h1>
+                <p>Every piece is made by hand from real materials, sold directly by the artisan who made it — browse the full collection below.</p>
+                <div class="shop-hero-actions">
+                    <a href="#shop-grid" class="shop-btn-gold">Browse Products <i class="fas fa-arrow-right"></i></a>
+                    <a href="about.html" class="shop-btn-outline">Our Story <i class="fas fa-play"></i></a>
+                </div>
+                <div class="shop-hero-perks">
+                    <div><i class="fas fa-leaf"></i> Ethically Sourced</div>
+                    <div><i class="fas fa-hand-holding-heart"></i> Made With Love</div>
+                    <div><i class="fas fa-truck"></i> Free Shipping $50+</div>
+                </div>
+            </div>
+            <div class="shop-hero-image">
+                <img src="../assets/images/products/p1-ceramic-vase.webp" alt="Handmade ceramic vase">
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="shop-about">
+        <div class="shop-about-grid">
+            <div class="shop-about-image">
+                <img src="../assets/images/products/p2-woven-tapestry.webp" alt="Artisan at work">
+            </div>
+            <div>
+                <p class="shop-about-eyebrow">About CraftMarket</p>
+                <h2>More Than Just A <span>Marketplace</span></h2>
+                <p>We believe a handmade object carries something a factory piece never can. Every listing here is made, priced and shipped by the artisan themselves — CraftMarket just gets it to your door.</p>
+                <ul class="shop-about-list">
+                    <li><i class="fas fa-check-circle"></i> Made by independent artisans</li>
+                    <li><i class="fas fa-check-circle"></i> Fair, transparent pricing</li>
+                    <li><i class="fas fa-check-circle"></i> Small-batch, never mass-produced</li>
+                    <li><i class="fas fa-check-circle"></i> Secure checkout & buyer protection</li>
+                </ul>
+                <a href="about.html" class="shop-btn-gold">Learn More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Picks -->
+    <section class="shop-picks">
+        <p class="shop-picks-eyebrow">Our Signature</p>
+        <h2>Popular Picks</h2>
+        <div class="shop-picks-grid" id="popular-picks">
+            <!-- Rendered by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="shop-trust-bar">
+        <div class="shop-trust-grid">
+            <div class="shop-trust-item">
+                <i class="fas fa-truck"></i>
+                <div>
+                    <h5>Free Shipping</h5>
+                    <p>On all orders over $50</p>
+                </div>
+            </div>
+            <div class="shop-trust-item">
+                <i class="fas fa-undo"></i>
+                <div>
+                    <h5>30-Day Returns</h5>
+                    <p>On every handmade item</p>
+                </div>
+            </div>
+            <div class="shop-trust-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>
+                    <h5>Secure Payment</h5>
+                    <p>Encrypted & buyer-protected</p>
+                </div>
+            </div>
+            <div class="shop-trust-item">
+                <i class="fas fa-hand-holding-heart"></i>
+                <div>
+                    <h5>Made By Hand</h5>
+                    <p>Small variations, real character</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog transition -->
+    <div class="shop-catalog-heading" id="shop-grid">
+        <span>Full Collection</span>
+        <h2>Browse All Products</h2>
+    </div>
+
+    <!-- Search -->
+    <section class="search-section" style="padding: 30px 20px;">
+        <div class="container">
+            <div class="search-bar" style="margin-bottom: 0;">
+                <input type="text" id="search-input" placeholder="Search for handicrafts...">
+                <button id="search-btn" class="btn btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <div id="active-filters" class="active-filters"></div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <div class="container">
+        <div class="products-container">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>Categories</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-all" value="all" checked>
+                        <label for="cat-all">All Categories</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-pottery" value="pottery">
+                        <label for="cat-pottery">Pottery & Ceramics</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-textiles" value="textiles">
+                        <label for="cat-textiles">Textiles & Weaving</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-jewelry" value="jewelry">
+                        <label for="cat-jewelry">Jewelry & Beads</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-woodwork" value="woodwork">
+                        <label for="cat-woodwork">Woodwork & Carving</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-leather" value="leather">
+                        <label for="cat-leather">Leather Goods</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-candles" value="candles">
+                        <label for="cat-candles">Candles & Fragrance</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-metalwork" value="metalwork">
+                        <label for="cat-metalwork">Metalwork</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-basketry" value="basketry">
+                        <label for="cat-basketry">Basketry</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-glass" value="glass">
+                        <label for="cat-glass">Glass Art</label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Price Range</h3>
+                    <div class="price-range">
+                        <input type="range" id="price-min" min="0" max="200" value="0">
+                    </div>
+                    <div class="price-range">
+                        <input type="range" id="price-max" min="0" max="200" value="200">
+                    </div>
+                    <p style="margin-top: 15px;">
+                        <strong>$</strong> <span id="price-display">0 - $200</span>
+                    </p>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Rating</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="rating-5" value="5">
+                        <label for="rating-5">⭐⭐⭐⭐⭐ (5 stars)</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="rating-4" value="4">
+                        <label for="rating-4">⭐⭐⭐⭐ (4+ stars)</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="rating-3" value="3">
+                        <label for="rating-3">⭐⭐⭐ (3+ stars)</label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Availability</h3>
+                    <div class="filter-option">
+                        <input type="checkbox" id="in-stock" checked>
+                        <label for="in-stock">In Stock</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%;" onclick="clearFilters()">Clear Filters</button>
+            </aside>
+
+            <!-- Products Main -->
+            <main class="products-main">
+                <div class="products-header">
+                    <div>
+                        <p id="results-count" style="color: var(--text-light);">Showing 12 products</p>
+                    </div>
+                    <select class="sort-select" id="sort-select">
+                        <option value="featured">Featured</option>
+                        <option value="newest">Newest First</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+
+                <div class="product-grid" id="products-grid">
+                    <!-- Products loaded by JavaScript -->
+                </div>
+
+                <div class="no-results" id="no-results" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>No products found</h3>
+                    <p>Try adjusting your filters or search terms</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top: 60px;">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link">
+                    <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="seller-dashboard.html">Become a Seller</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="../404.html" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="../404.html" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="../404.html" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        // Products page specific script
+        let filteredProducts = [...products];
+        let searchQuery = '';
+        let sellerFilter = null;
+
+        // Called by script.js when the shared search bar is submitted
+        function onSearchSubmitted(query) {
+            searchQuery = query;
+            loadProducts();
+        }
+
+        // Called by script.js when a category chip is clicked
+        function onCategoryTagSelected(category) {
+            selectCategory(category);
+            loadProducts();
+        }
+
+        function selectCategory(category) {
+            document.querySelectorAll('input[id^="cat-"]').forEach(cb => {
+                cb.checked = cb.value === category;
+            });
+            if (!document.querySelector('input[id^="cat-"]:checked')) {
+                document.getElementById('cat-all').checked = true;
+            }
+        }
+
+        function renderActiveFilters() {
+            const container = document.getElementById('active-filters');
+            const chips = [];
+
+            if (searchQuery) {
+                chips.push(`<span class="active-filter">Search: "${searchQuery}"
+                    <button onclick="clearSearch()" title="Clear search">&times;</button></span>`);
+            }
+            if (sellerFilter) {
+                const seller = sellers.find(s => s.id === sellerFilter);
+                chips.push(`<span class="active-filter">Shop: ${seller ? seller.name : sellerFilter}
+                    <button onclick="clearSellerFilter()" title="Clear shop filter">&times;</button></span>`);
+            }
+
+            container.innerHTML = chips.join('');
+        }
+
+        function clearSearch() {
+            searchQuery = '';
+            document.getElementById('search-input').value = '';
+            loadProducts();
+        }
+
+        function clearSellerFilter() {
+            sellerFilter = null;
+            loadProducts();
+        }
+
+        function loadProducts() {
+            const grid = document.getElementById('products-grid');
+            const noResults = document.getElementById('no-results');
+            
+            applyFilters();
+            applySorting();
+            renderActiveFilters();
+
+            if (filteredProducts.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                document.getElementById('results-count').textContent = 'No products found';
+            } else {
+                grid.innerHTML = filteredProducts.map(p => createProductCard(p)).join('');
+                noResults.style.display = 'none';
+                document.getElementById('results-count').textContent = `Showing ${filteredProducts.length} products`;
+                attachProductCardListeners();
+            }
+        }
+
+        function applyFilters() {
+            filteredProducts = products.filter(product => {
+                // Category filter
+                const catAll = document.getElementById('cat-all').checked;
+                const catPottery = document.getElementById('cat-pottery').checked;
+                const catTextiles = document.getElementById('cat-textiles').checked;
+                const catJewelry = document.getElementById('cat-jewelry').checked;
+                const catWoodwork = document.getElementById('cat-woodwork').checked;
+                const catLeather = document.getElementById('cat-leather').checked;
+                const catCandles = document.getElementById('cat-candles').checked;
+                const catMetalwork = document.getElementById('cat-metalwork').checked;
+                const catBasketry = document.getElementById('cat-basketry').checked;
+                const catGlass = document.getElementById('cat-glass').checked;
+
+                let categoryMatch = catAll;
+                if (!catAll) {
+                    categoryMatch = (catPottery && product.category === 'pottery') ||
+                                  (catTextiles && product.category === 'textiles') ||
+                                  (catJewelry && product.category === 'jewelry') ||
+                                  (catWoodwork && product.category === 'woodwork') ||
+                                  (catLeather && product.category === 'leather') ||
+                                  (catCandles && product.category === 'candles') ||
+                                  (catMetalwork && product.category === 'metalwork') ||
+                                  (catBasketry && product.category === 'basketry') ||
+                                  (catGlass && product.category === 'glass');
+                }
+
+                // Search filter (name, description, category and seller)
+                let searchMatch = true;
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    searchMatch = [product.name, product.description, product.category, product.seller]
+                        .some(field => field.toLowerCase().includes(q));
+                }
+
+                // Seller filter
+                const sellerMatch = !sellerFilter || product.seller_id === sellerFilter;
+
+                // Price filter (sliders can be dragged past each other, so normalise)
+                const rawMin = parseInt(document.getElementById('price-min').value);
+                const rawMax = parseInt(document.getElementById('price-max').value);
+                const priceMin = Math.min(rawMin, rawMax);
+                const priceMax = Math.max(rawMin, rawMax);
+                const priceMatch = product.price >= priceMin && product.price <= priceMax;
+
+                // Rating filter
+                const rating5 = document.getElementById('rating-5').checked;
+                const rating4 = document.getElementById('rating-4').checked;
+                const rating3 = document.getElementById('rating-3').checked;
+                
+                let ratingMatch = true;
+                if (rating5 || rating4 || rating3) {
+                    ratingMatch = (rating5 && Math.round(product.rating) === 5) ||
+                                (rating4 && Math.round(product.rating) >= 4) ||
+                                (rating3 && Math.round(product.rating) >= 3);
+                }
+
+                // Stock filter
+                const inStock = document.getElementById('in-stock').checked;
+                const stockMatch = !inStock || product.in_stock;
+
+                return categoryMatch && priceMatch && ratingMatch && stockMatch && searchMatch && sellerMatch;
+            });
+        }
+
+        function applySorting() {
+            const sortValue = document.getElementById('sort-select').value;
+            
+            switch(sortValue) {
+                case 'newest':
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                default: // featured
+                    filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('cat-all').checked = true;
+            document.querySelectorAll('.filter-option input[type="checkbox"]').forEach(cb => {
+                if (cb.id !== 'cat-all') cb.checked = false;
+            });
+            document.getElementById('price-min').value = 0;
+            document.getElementById('price-max').value = 200;
+            document.getElementById('in-stock').checked = true;
+            document.getElementById('search-input').value = '';
+            searchQuery = '';
+            sellerFilter = null;
+            sessionStorage.removeItem('searchQuery');
+            updatePriceDisplay();
+            loadProducts();
+        }
+
+        function updatePriceDisplay() {
+            const a = parseInt(document.getElementById('price-min').value);
+            const b = parseInt(document.getElementById('price-max').value);
+            document.getElementById('price-display').textContent = `${Math.min(a, b)} - $${Math.max(a, b)}`;
+        }
+
+        // Event listeners for filters
+        document.getElementById('cat-all').addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelectorAll('input[id^="cat-"]').forEach(cb => {
+                    if (cb.id !== 'cat-all') cb.checked = false;
+                });
+            } else if (!document.querySelector('input[id^="cat-"]:not(#cat-all):checked')) {
+                // Don't allow leaving every category checkbox unchecked
+                this.checked = true;
+            }
+            loadProducts();
+        });
+
+        document.querySelectorAll('input[id^="cat-"]').forEach(cb => {
+            if (cb.id !== 'cat-all') {
+                cb.addEventListener('change', () => {
+                    const anyChecked = document.querySelector('input[id^="cat-"]:not(#cat-all):checked');
+                    document.getElementById('cat-all').checked = !anyChecked;
+                    loadProducts();
+                });
+            }
+        });
+
+        document.getElementById('price-min').addEventListener('input', () => {
+            updatePriceDisplay();
+            loadProducts();
+        });
+
+        document.getElementById('price-max').addEventListener('input', () => {
+            updatePriceDisplay();
+            loadProducts();
+        });
+
+        document.querySelectorAll('input[id^="rating-"]').forEach(cb => {
+            cb.addEventListener('change', loadProducts);
+        });
+
+        document.getElementById('in-stock').addEventListener('change', loadProducts);
+
+        document.getElementById('sort-select').addEventListener('change', loadProducts);
+
+        // The shared search bar is wired by script.js on DOMContentLoaded
+
+        // Apply incoming filters from the URL / a search made on another page
+        (function initFromContext() {
+            const params = new URLSearchParams(window.location.search);
+
+            const category = params.get('category');
+            if (category) selectCategory(category);
+
+            const seller = parseInt(params.get('seller'));
+            if (seller) sellerFilter = seller;
+
+            // A query handed over from another page is consumed once
+            const handedOver = sessionStorage.getItem('searchQuery');
+            sessionStorage.removeItem('searchQuery');
+
+            const query = params.get('q') || handedOver || '';
+            if (query) {
+                searchQuery = query;
+                document.getElementById('search-input').value = query;
+            }
+
+            updatePriceDisplay();
+        })();
+
+        // Initial load
+        loadProducts();
+
+        // Popular Picks — a small hand-picked row shown in the hero landing block
+        (function renderPopularPicks() {
+            const container = document.getElementById('popular-picks');
+            if (!container) return;
+
+            const pickIds = [1, 3, 4, 21];
+            const picks = pickIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+
+            container.innerHTML = picks.map(product => `
+                <div class="pick-card">
+                    ${productImageMarkup(product)}
+                    <div class="pick-card-body">
+                        <h4>${product.name}</h4>
+                        <p>by ${product.seller}</p>
+                        <div class="pick-card-footer">
+                            <span class="price">$${product.price.toFixed(2)}</span>
+                            <button class="pick-add-btn" data-product-id="${product.id}" title="Add to cart">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.pick-add-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const productId = parseInt(btn.dataset.productId);
+                    addToCart(productId, 1);
+                    showNotification('Added to cart!', 'success');
+                });
+            });
+        })();
+
+        // House ad — pick a random category + matching video each time the page loads
+        const SIDE_AD_VARIANTS = [
+            { category: 'pottery', video: '../assets/videos/hero-pottery.mp4', headline: 'Pottery & Ceramics', text: 'Up to 25% off hand-thrown pieces this week' },
+            { category: 'textiles', video: '../assets/videos/hero-textiles.mp4', headline: 'Textiles & Weaving', text: 'Up to 20% off hand-loomed pieces this week' },
+            { category: 'jewelry', video: '../assets/videos/hero-jewelry.mp4', headline: 'Artisan Jewelry', text: 'Up to 30% off handcrafted pieces this week' },
+            { category: 'woodwork', video: '../assets/videos/hero-woodwork.mp4', headline: 'Woodwork & Carving', text: 'Up to 25% off hand-carved pieces this week' }
+        ];
+
+        const sideAd = document.getElementById('side-ad');
+        if (sideAd) {
+            const variant = SIDE_AD_VARIANTS[Math.floor(Math.random() * SIDE_AD_VARIANTS.length)];
+            const video = document.getElementById('side-ad-video');
+            document.getElementById('side-ad-video-source').src = variant.video;
+            document.getElementById('side-ad-headline').textContent = variant.headline;
+            document.getElementById('side-ad-text').textContent = variant.text;
+            document.getElementById('side-ad-cta').href = `products.html?category=${variant.category}`;
+            video.load();
+            video.play().catch(() => {});
+
+            // Dismiss the house ad
+            document.getElementById('side-ad-close').addEventListener('click', () => {
+                sideAd.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

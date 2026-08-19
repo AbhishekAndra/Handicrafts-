@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Profile - CraftMarket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ---------- Hero ---------- */
+        .profile-hero {
+            padding: 70px 20px 40px;
+            overflow: hidden;
+        }
+
+        .profile-hero-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .profile-brand {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-hero h1 {
+            font-family: var(--font-serif);
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        .profile-hero .tagline {
+            color: var(--text-light);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            max-width: 480px;
+        }
+
+        .profile-hero-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .profile-visual {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-blob {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 45% 55% 60% 40% / 45% 40% 60% 55%;
+            background: radial-gradient(circle at 30% 30%, var(--secondary-color), var(--primary-color) 70%);
+            opacity: 0.85;
+            filter: blur(2px);
+            z-index: 0;
+            animation: blobMove 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes blobMove {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(12deg) scale(1.05); }
+        }
+
+        .profile-image-frame {
+            position: relative;
+            z-index: 1;
+            width: 340px;
+            height: 340px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--light-bg), var(--border-color));
+        }
+
+        .profile-image-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-dots {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 25px;
+        }
+
+        .profile-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .profile-dot.active,
+        .profile-dot:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.15);
+        }
+
+        /* ---------- Stats ---------- */
+        .profile-stats {
+            background-color: var(--dark-bg);
+            color: var(--white);
+            padding: 40px 20px;
+            margin-top: 30px;
+        }
+
+        .profile-stats-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            text-align: center;
+        }
+
+        .profile-stat .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .profile-stat p {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ccc;
+            margin-top: 6px;
+        }
+
+        /* ---------- Specialties ---------- */
+        .specialties-section {
+            padding: 70px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 45px;
+        }
+
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .specialty-card {
+            text-align: center;
+            padding: 35px 25px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .specialty-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .specialty-card i {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 16px;
+        }
+
+        .specialty-card h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .specialty-card p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* ---------- Latest work ---------- */
+        .work-section {
+            padding: 70px 20px;
+            background-color: var(--light-bg);
+        }
+
+        .work-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+
+        .work-header h2 {
+            font-size: 30px;
+        }
+
+        /* ---------- Testimonials ---------- */
+        .profile-testimonials {
+            padding: 70px 20px;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 28px;
+        }
+
+        .testimonial-card .stars {
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .testimonial-card p.quote {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 18px;
+        }
+
+        .testimonial-person {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .testimonial-person .name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .testimonial-person .meta {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .not-found i {
+            font-size: 60px;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .profile-hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-visual {
+                margin-top: 20px;
+            }
+
+            .profile-hero h1 {
+                font-size: 32px;
+            }
+
+            .profile-stats-grid,
+            .specialties-grid,
+            .testimonial-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .work-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link active">Shop</a>
+                    <a href="seller-dashboard.html" class="nav-link">Sell</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="profile-root"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link">
+                    <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="seller-dashboard.html">Become a Seller</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="services.html#quote">Contact Us</a></li>
+                        <li><a href="services.html#services">Shipping Info</a></li>
+                        <li><a href="services.html#services">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="../404.html" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="../404.html" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="../404.html" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="../404.html" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CraftMarket. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms &amp; Conditions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        const SPECIALTIES = {
+            pottery: [
+                { icon: 'fa-mug-hot', title: 'Hand-thrown Pottery', text: 'Every piece starts on the wheel, shaped by hand from raw clay.' },
+                { icon: 'fa-fill-drip', title: 'Custom Glazing', text: 'Small-batch glazes mixed and tested in-house for one-of-a-kind finishes.' },
+                { icon: 'fa-fire', title: 'Kiln Firing & Restoration', text: 'From first firing to repairing a much-loved chipped favourite.' }
+            ],
+            textiles: [
+                { icon: 'fa-icons', title: 'Hand-loom Weaving', text: 'Traditional looms and techniques passed down through generations.' },
+                { icon: 'fa-tint', title: 'Natural Dyeing', text: 'Plant and mineral dyes for colour that only gets better with age.' },
+                { icon: 'fa-scroll', title: 'Custom Embroidery', text: 'Personalised patterns stitched to order, thread by thread.' }
+            ],
+            jewelry: [
+                { icon: 'fa-ring', title: 'Metal Smithing', text: 'Sterling silver and gold-tone pieces shaped and soldered by hand.' },
+                { icon: 'fa-gem', title: 'Gemstone Setting', text: 'Semi-precious stones sourced ethically and set one at a time.' },
+                { icon: 'fa-pen-nib', title: 'Custom Engraving', text: 'Initials, dates or a short message, engraved to order.' }
+            ],
+            woodwork: [
+                { icon: 'fa-hammer', title: 'Hand Carving', text: 'Chisel and gouge work on solid timber — no two grains alike.' },
+                { icon: 'fa-compact-disc', title: 'Wood Turning', text: 'Bowls and vessels shaped on the lathe from a single block.' },
+                { icon: 'fa-couch', title: 'Furniture Restoration', text: 'Bringing tired, inherited furniture back to daily use.' }
+            ],
+            leather: [
+                { icon: 'fa-cut', title: 'Hand Cutting & Skiving', text: 'Full-grain hide cut and thinned by hand for a clean, even fold.' },
+                { icon: 'fa-shoe-prints', title: 'Saddle Stitching', text: 'Traditional two-needle stitching for seams that outlast the leather.' },
+                { icon: 'fa-stamp', title: 'Custom Embossing', text: 'Initials or a monogram pressed to order on every piece.' }
+            ],
+            candles: [
+                { icon: 'fa-fire-alt', title: 'Small-batch Pouring', text: 'Soy wax poured by hand in batches of a dozen or fewer at a time.' },
+                { icon: 'fa-leaf', title: 'Natural Fragrance', text: 'Phthalate-free scents blended in-house from essential oils.' },
+                { icon: 'fa-gift', title: 'Gift Sets', text: 'Candles paired and boxed to order for gifting.' }
+            ],
+            metalwork: [
+                { icon: 'fa-fire', title: 'Forging & Hammering', text: 'Sheet copper and brass raised and shaped by hand over an anvil.' },
+                { icon: 'fa-pen-nib', title: 'Hand Engraving', text: 'Traditional patterns chased into every piece, one strike at a time.' },
+                { icon: 'fa-water', title: 'Antique Finishing', text: 'Patinas developed and sealed in-house for a lived-in warmth.' }
+            ],
+            basketry: [
+                { icon: 'fa-leaf', title: 'Hand Weaving', text: 'Rattan and reed woven strand by strand over a wooden form.' },
+                { icon: 'fa-recycle', title: 'Sustainable Materials', text: 'Fast-growing, responsibly harvested reed and natural fibers.' },
+                { icon: 'fa-ruler-combined', title: 'Custom Sizing', text: 'Baskets woven to a size and shape that fits your space.' }
+            ],
+            glass: [
+                { icon: 'fa-fire', title: 'Furnace Blowing', text: 'Molten glass gathered and shaped by hand at the furnace.' },
+                { icon: 'fa-palette', title: 'Hand-Mixed Color', text: 'Color and texture blended into the glass while it is still hot.' },
+                { icon: 'fa-cut', title: 'Leaded Glasswork', text: 'Stained glass pieces hand-cut and leaded pane by pane.' }
+            ]
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const sellerId = parseInt(params.get('seller')) || sellers[0].id;
+        const seller = sellers.find(s => s.id === sellerId);
+        const root = document.getElementById('profile-root');
+
+        function renderNotFound() {
+            root.innerHTML = `
+                <div class="container">
+                    <div class="not-found">
+                        <i class="fas fa-user-slash"></i>
+                        <h2>Artisan not found</h2>
+                        <p>We could not find a shop with that ID.</p>
+                        <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">Browse All Products</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProfile() {
+            document.title = `${seller.name} - CraftMarket`;
+
+            const sellerProducts = products.filter(p => p.seller_id === seller.id);
+            const galleryProducts = sellerProducts.slice(0, 4);
+            const specialties = SPECIALTIES[sellerProducts[0]?.category] || SPECIALTIES.pottery;
+
+            root.innerHTML = `
+                <section class="profile-hero">
+                    <div class="profile-hero-grid">
+                        <div>
+                            <div class="profile-brand"><i class="fas fa-handshake"></i> CraftMarket Artisan</div>
+                            <h1>${seller.name}${seller.verified ? ' <i class="fas fa-check-circle" style="color: var(--success-color); font-size: 28px;"></i>' : ''}</h1>
+                            <p class="tagline">${seller.description}</p>
+                            <div class="profile-hero-actions">
+                                <a href="products.html?seller=${seller.id}" class="btn btn-primary">View Shop</a>
+                                <a href="services.html#quote" class="btn btn-outline">Message Artisan</a>
+                            </div>
+                        </div>
+                        <div class="profile-visual">
+                            <div class="profile-blob"></div>
+                            <div class="profile-image-frame" id="profile-image-frame">
+                                ${galleryProducts.length ? productImageMarkup(galleryProducts[0]) : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:120px;">${seller.avatar}</div>`}
+                            </div>
+                            ${galleryProducts.length > 1 ? `
+                            <div class="profile-dots">
+                                ${galleryProducts.map((p, i) => `<button class="profile-dot ${i === 0 ? 'active' : ''}" data-index="${i}" title="${p.name}"></button>`).join('')}
+                            </div>` : ''}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="profile-stats">
+                    <div class="profile-stats-grid">
+                        <div class="profile-stat"><div class="value">${seller.rating}</div><p>Rating</p></div>
+                        <div class="profile-stat"><div class="value">${seller.reviews}</div><p>Reviews</p></div>
+                        <div class="profile-stat"><div class="value">${seller.products}</div><p>Products</p></div>
+                        <div class="profile-stat"><div class="value">${seller.followers.toLocaleString()}</div><p>Followers</p></div>
+                    </div>
+                </section>
+
+                <section class="specialties-section">
+                    <div class="container">
+                        <h2 class="section-title">Specialties</h2>
+                        <div class="specialties-grid">
+                            ${specialties.map(s => `
+                                <div class="specialty-card">
+                                    <i class="fas ${s.icon}"></i>
+                                    <h3>${s.title}</h3>
+                                    <p>${s.text}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="work-section">
+                    <div class="work-header">
+                        <h2>Latest Work</h2>
+                        <a href="products.html?seller=${seller.id}" class="btn btn-outline">View All Products</a>
+                    </div>
+                    <div class="container">
+                        <div class="product-grid" id="seller-work-grid"></div>
+                    </div>
+                </section>
+
+                <section class="profile-testimonials">
+                    <div class="container">
+                        <h2 class="section-title">Customer Testimonials</h2>
+                        <div class="testimonial-grid" id="seller-testimonial-grid"></div>
+                    </div>
+                </section>
+            `;
+
+            // Latest work grid — reuse the shared product card renderer
+            const workGrid = document.getElementById('seller-work-grid');
+            if (sellerProducts.length) {
+                workGrid.innerHTML = sellerProducts.slice(0, 8).map(p => createProductCard(p)).join('');
+                attachProductCardListeners();
+            } else {
+                workGrid.innerHTML = '<p style="color: var(--text-light); text-align: center; grid-column: 1 / -1;">This artisan has not listed any products yet.</p>';
+            }
+
+            // Hero image dots
+            document.querySelectorAll('.profile-dot').forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const product = galleryProducts[parseInt(dot.dataset.index)];
+                    document.getElementById('profile-image-frame').innerHTML = productImageMarkup(product);
+                    document.querySelectorAll('.profile-dot').forEach(d => d.classList.remove('active'));
+                    dot.classList.add('active');
+                });
+            });
+
+            // Testimonials — real reviews for this artisan's products
+            const sellerReviews = [];
+            sellerProducts.forEach(p => {
+                (reviews[p.id] || []).forEach(r => sellerReviews.push({ ...r, product: p.name }));
+            });
+
+            const testimonialGrid = document.getElementById('seller-testimonial-grid');
+            if (sellerReviews.length) {
+                testimonialGrid.innerHTML = sellerReviews.slice(0, 3).map(r => `
+                    <div class="testimonial-card">
+                        <span class="stars">${'⭐'.repeat(r.rating)}</span>
+                        <p class="quote">&ldquo;${r.text}&rdquo;</p>
+                        <div class="testimonial-person">
+                            <div class="testimonial-avatar">${r.user.split(' ').map(n => n[0]).join('')}</div>
+                            <div>
+                                <div class="name">${r.user}</div>
+                                <div class="meta">on ${r.product}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                testimonialGrid.innerHTML = '<p style="color: var(--text-light); text-align: center; grid-column: 1 / -1;">No reviews yet — be the first to shop this artisan\'s work.</p>';
+            }
+        }
+
+        if (!seller) {
+            renderNotFound();
+        } else {
+            renderProfile();
+        }
+    </script>
+</body>
+</html>

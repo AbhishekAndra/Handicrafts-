@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - CraftMarket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 40px 20px;
+        }
+
+        .dashboard-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-link {
+            padding: 15px 20px;
+            background-color: var(--light-bg);
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: left;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .dash-panel {
+            display: none;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .dash-panel.active {
+            display: flex;
+        }
+
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .review-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .review-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .review-product {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .listing-thumb {
+            width: 36px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .review-thumb {
+            width: 16px;
+            height: 16px;
+            object-fit: cover;
+            border-radius: 3px;
+            vertical-align: middle;
+            margin-right: 2px;
+        }
+
+        .table-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            margin-right: 12px;
+            color: var(--primary-color);
+        }
+
+        .table-actions button.danger {
+            color: var(--error-color);
+        }
+
+        .empty-row td {
+            text-align: center;
+            color: var(--text-light);
+            padding: 40px 15px;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .dashboard-main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .section-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .section-card h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-card h2 i {
+            color: var(--primary-color);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background-color: var(--light-bg);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table tr:hover {
+            background-color: var(--light-bg);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: oklch(0.94 0.03 132);
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            background-color: oklch(0.94 0.04 70);
+            color: var(--warning-color);
+        }
+
+        .status-inactive {
+            background-color: oklch(0.92 0.03 30);
+            color: var(--error-color);
+        }
+
+        .form-section {
+            background-color: var(--light-bg);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .stats-grid,
+            .form-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .section-card {
+                padding: 20px;
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 560px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Shop</a>
+                    <a href="seller-dashboard.html" class="nav-link active">Sell</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <section style="padding: 40px 20px; background-color: var(--light-bg); text-align: center;">
+        <h1 style="font-size: 32px; margin-bottom: 10px;">Seller Dashboard</h1>
+        <p style="color: var(--text-light);">Manage your shop and products</p>
+    </section>
+
+    <!-- Dashboard -->
+    <div class="container">
+        <div class="dashboard-container">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <button class="sidebar-link active" data-panel="dashboard">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button class="sidebar-link" data-panel="products">
+                    <i class="fas fa-box"></i> Products
+                </button>
+                <button class="sidebar-link" data-panel="orders">
+                    <i class="fas fa-receipt"></i> Orders
+                </button>
+                <button class="sidebar-link" data-panel="reviews">
+                    <i class="fas fa-star"></i> Reviews
+                </button>
+                <button class="sidebar-link" data-panel="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button class="sidebar-link" id="seller-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="dashboard-main">
+              <!-- ===== Dashboard panel ===== -->
+              <section class="dash-panel active" id="panel-dashboard">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Sales</h3>
+                        <div class="value">$12,450</div>
+                        <p style="color: var(--text-light); margin-top: 10px;">This month</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <div class="value">28</div>
+                        <p style="color: var(--text-light); margin-top: 10px;">Active listings</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Orders</h3>
+                        <div class="value">156</div>
+                        <p style="color: var(--text-light); margin-top: 10px;">All time</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rating</h3>
+                        <div class="value">4.8</div>
+                        <p style="color: var(--text-light); margin-top: 10px;">Out of 5.0</p>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-receipt"></i>
+                        Recent Orders
+                    </h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Product</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ORD-001234</td>
+                                <td>John Smith</td>
+                                <td>Ceramic Vase</td>
+                                <td>$45.99</td>
+                                <td><span class="status-badge status-active">Completed</span></td>
+                                <td>2026-08-15</td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-001233</td>
+                                <td>Sarah Johnson</td>
+                                <td>Wooden Box</td>
+                                <td>$72.00</td>
+                                <td><span class="status-badge status-active">Completed</span></td>
+                                <td>2026-08-14</td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-001232</td>
+                                <td>Michael Brown</td>
+                                <td>Beaded Necklace</td>
+                                <td>$35.50</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>2026-08-14</td>
+                            </tr>
+                            <tr>
+                                <td>#ORD-001231</td>
+                                <td>Emily Davis</td>
+                                <td>Hand-woven Tapestry</td>
+                                <td>$65.00</td>
+                                <td><span class="status-badge status-active">Completed</span></td>
+                                <td>2026-08-13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Top Products -->
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-star"></i>
+                        Top Products
+                    </h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Sales</th>
+                                <th>Revenue</th>
+                                <th>Rating</th>
+                                <th>Reviews</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Handmade Ceramic Vase</td>
+                                <td>45</td>
+                                <td>$2,069.55</td>
+                                <td>⭐⭐⭐⭐⭐ 4.8</td>
+                                <td>124</td>
+                            </tr>
+                            <tr>
+                                <td>Wooden Carved Box</td>
+                                <td>38</td>
+                                <td>$2,736.00</td>
+                                <td>⭐⭐⭐⭐ 4.6</td>
+                                <td>67</td>
+                            </tr>
+                            <tr>
+                                <td>Silver Bracelet</td>
+                                <td>52</td>
+                                <td>$4,679.48</td>
+                                <td>⭐⭐⭐⭐⭐ 4.9</td>
+                                <td>201</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+              </section>
+
+              <!-- ===== Products panel ===== -->
+              <section class="dash-panel" id="panel-products">
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-box"></i>
+                        My Listings
+                    </h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Rating</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listings-body"></tbody>
+                    </table>
+                </div>
+
+                <!-- Add New Product -->
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-plus-circle"></i>
+                        Add New Product
+                    </h2>
+                    <form id="add-product-form" class="form-section">
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="np-name">Product Name</label>
+                                <input type="text" id="np-name" placeholder="e.g., Hand-painted Ceramic Vase" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="np-category">Category</label>
+                                <select id="np-category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="pottery">Pottery &amp; Ceramics</option>
+                                    <option value="textiles">Textiles &amp; Weaving</option>
+                                    <option value="jewelry">Jewelry &amp; Beads</option>
+                                    <option value="woodwork">Woodwork &amp; Carving</option>
+                                    <option value="leather">Leather Goods</option>
+                                    <option value="candles">Candles &amp; Fragrance</option>
+                                    <option value="metalwork">Metalwork</option>
+                                    <option value="basketry">Basketry</option>
+                                    <option value="glass">Glass Art</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="np-price">Price</label>
+                                <input type="number" id="np-price" placeholder="0.00" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="np-stock">Stock Quantity</label>
+                                <input type="number" id="np-stock" placeholder="0" min="0" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="np-description">Description</label>
+                            <textarea id="np-description" placeholder="Describe your product in detail..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="np-images">Upload Images</label>
+                            <input type="file" id="np-images" accept="image/*" multiple>
+                            <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">You can upload multiple images</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </form>
+                </div>
+              </section>
+
+              <!-- ===== Orders panel ===== -->
+              <section class="dash-panel" id="panel-orders">
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-receipt"></i>
+                        All Orders
+                    </h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seller-orders-body"></tbody>
+                    </table>
+                </div>
+              </section>
+
+              <!-- ===== Reviews panel ===== -->
+              <section class="dash-panel" id="panel-reviews">
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-star"></i>
+                        Customer Reviews
+                    </h2>
+                    <div id="seller-reviews"></div>
+                </div>
+              </section>
+
+              <!-- ===== Settings panel ===== -->
+              <section class="dash-panel" id="panel-settings">
+                <div class="section-card">
+                    <h2>
+                        <i class="fas fa-cog"></i>
+                        Shop Settings
+                    </h2>
+                    <form id="shop-settings-form" class="form-section">
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="ss-name">Shop Name</label>
+                                <input type="text" id="ss-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ss-email">Contact Email</label>
+                                <input type="email" id="ss-email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ss-description">Shop Description</label>
+                            <textarea id="ss-description"></textarea>
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="form-group">
+                                <label for="ss-processing">Processing Time</label>
+                                <select id="ss-processing">
+                                    <option value="1-2">1–2 business days</option>
+                                    <option value="3-5">3–5 business days</option>
+                                    <option value="1-2w">1–2 weeks</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ss-payout">Payout Method</label>
+                                <select id="ss-payout">
+                                    <option value="bank">Bank Transfer</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="stripe">Stripe</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                            <input type="checkbox" id="ss-vacation" style="width: auto;">
+                            <label for="ss-vacation" style="margin: 0;">Vacation mode — pause new orders</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </form>
+                </div>
+              </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top: 60px;">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link">
+                    <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Seller Resources</h4>
+                    <ul>
+                        <li><a href="#">Selling Guidelines</a></li>
+                        <li><a href="#">Fee Structure</a></li>
+                        <li><a href="#">Seller Support</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        // The demo dashboard is presented as the first seller's shop
+        const SHOP = sellers[0];
+        const CATEGORY_EMOJI = { pottery: '🏺', textiles: '🧵', jewelry: '💎', woodwork: '🪵' };
+
+        // ---------- Panel switching ----------
+        document.querySelectorAll('.sidebar-link[data-panel]').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById('panel-' + link.dataset.panel).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        document.getElementById('seller-logout').addEventListener('click', () => {
+            logoutUser();
+            showNotification('Signed out of your seller account', 'info');
+            setTimeout(() => { window.location.href = '../index.html'; }, 800);
+        });
+
+        // ---------- Listings ----------
+        function getSellerProducts() {
+            return JSON.parse(localStorage.getItem('sellerProducts')) || [];
+        }
+
+        function saveSellerProducts(list) {
+            localStorage.setItem('sellerProducts', JSON.stringify(list));
+        }
+
+        function allListings() {
+            return [
+                ...products.filter(p => p.seller_id === SHOP.id),
+                ...getSellerProducts()
+            ];
+        }
+
+        function renderListings() {
+            const body = document.getElementById('listings-body');
+            const listings = allListings();
+
+            if (!listings.length) {
+                body.innerHTML = '<tr class="empty-row"><td colspan="6">No listings yet — add your first product below.</td></tr>';
+                return;
+            }
+
+            body.innerHTML = listings.map(item => {
+                const isCustom = item.custom === true;
+                const stock = item.stock !== undefined ? item.stock : (item.in_stock ? 'In stock' : 0);
+                const stockLabel = stock === 0 || stock === false
+                    ? '<span class="status-badge status-inactive">Out of stock</span>'
+                    : `<span class="status-badge status-active">${stock}</span>`;
+
+                return `
+                    <tr>
+                        <td style="display: flex; align-items: center; gap: 10px;">${productImageMarkup(item, 'listing-thumb')} ${item.name}</td>
+                        <td style="text-transform: capitalize;">${item.category}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td>${stockLabel}</td>
+                        <td>${item.rating ? '⭐ ' + item.rating : '—'}</td>
+                        <td class="table-actions">
+                            ${isCustom
+                                ? `<button class="danger" onclick="deleteListing(${item.id})" title="Remove listing"><i class="fas fa-trash"></i></button>`
+                                : `<a href="product-details.html?id=${item.id}" title="View listing"><i class="fas fa-eye"></i></a>`}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteListing(id) {
+            if (!confirm('Remove this listing?')) return;
+            saveSellerProducts(getSellerProducts().filter(p => p.id !== id));
+            renderListings();
+            showNotification('Listing removed', 'info');
+        }
+
+        document.getElementById('add-product-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const category = document.getElementById('np-category').value;
+            const stock = parseInt(document.getElementById('np-stock').value);
+
+            const listing = {
+                id: Date.now(),
+                custom: true,
+                name: document.getElementById('np-name').value.trim(),
+                category: category,
+                seller: SHOP.name,
+                seller_id: SHOP.id,
+                price: parseFloat(document.getElementById('np-price').value),
+                original_price: parseFloat(document.getElementById('np-price').value),
+                image: CATEGORY_EMOJI[category] || '🎨',
+                rating: 0,
+                reviews: 0,
+                description: document.getElementById('np-description').value.trim(),
+                stock: stock,
+                in_stock: stock > 0,
+                featured: false
+            };
+
+            const list = getSellerProducts();
+            list.push(listing);
+            saveSellerProducts(list);
+
+            renderListings();
+            this.reset();
+            showNotification('Product added successfully!', 'success');
+        });
+
+        // ---------- Orders ----------
+        const demoOrders = [
+            { id: '#ORD-001234', customer: 'John Smith', items: 'Ceramic Vase', amount: 45.99, status: 'Completed', date: '2026-08-15' },
+            { id: '#ORD-001233', customer: 'Sarah Johnson', items: 'Wooden Box', amount: 72.00, status: 'Completed', date: '2026-08-14' },
+            { id: '#ORD-001232', customer: 'Michael Brown', items: 'Beaded Necklace', amount: 35.50, status: 'Pending', date: '2026-08-14' },
+            { id: '#ORD-001231', customer: 'Emily Davis', items: 'Hand-woven Tapestry', amount: 65.00, status: 'Completed', date: '2026-08-13' },
+            { id: '#ORD-001230', customer: 'Aisha Rahman', items: 'Turquoise Earrings, Silver Bracelet', amount: 131.99, status: 'Completed', date: '2026-08-11' },
+            { id: '#ORD-001229', customer: 'Lena Fischer', items: 'Macramé Plant Hanger', amount: 28.50, status: 'Pending', date: '2026-08-10' }
+        ];
+
+        function renderSellerOrders() {
+            // Orders placed through this browser appear alongside the demo history
+            const placed = getOrders().map(order => ({
+                id: order.id,
+                customer: order.address.name,
+                items: order.items.map(i => i.name).join(', '),
+                amount: order.total,
+                status: order.status,
+                date: order.date
+            }));
+
+            document.getElementById('seller-orders-body').innerHTML = [...placed, ...demoOrders].map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.items}</td>
+                    <td>$${order.amount.toFixed(2)}</td>
+                    <td><span class="status-badge ${order.status === 'Completed' ? 'status-active' : 'status-pending'}">${order.status}</span></td>
+                    <td>${order.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        // ---------- Reviews ----------
+        function renderSellerReviews() {
+            const cards = [];
+
+            Object.keys(reviews).forEach(productId => {
+                const product = products.find(p => p.id === parseInt(productId));
+                if (!product) return;
+
+                reviews[productId].forEach(review => {
+                    cards.push(`
+                        <div class="review-card">
+                            <div class="review-head">
+                                <div>
+                                    <strong>${review.user}</strong>
+                                    <div class="review-product">on ${productImageMarkup(product, 'review-thumb')} ${product.name}</div>
+                                </div>
+                                <span class="review-product">${review.date}</span>
+                            </div>
+                            <div class="stars">${'⭐'.repeat(review.rating)}</div>
+                            <p style="margin-top: 8px; color: var(--text-light);">${review.text}</p>
+                        </div>
+                    `);
+                });
+            });
+
+            document.getElementById('seller-reviews').innerHTML = cards.join('');
+        }
+
+        // ---------- Settings ----------
+        function loadShopSettings() {
+            const saved = JSON.parse(localStorage.getItem('shopSettings')) || {};
+
+            document.getElementById('ss-name').value = saved.name || SHOP.name;
+            document.getElementById('ss-email').value = saved.email || 'studio@craftmarket.example';
+            document.getElementById('ss-description').value = saved.description || SHOP.description;
+            document.getElementById('ss-processing').value = saved.processing || '1-2';
+            document.getElementById('ss-payout').value = saved.payout || 'bank';
+            document.getElementById('ss-vacation').checked = !!saved.vacation;
+        }
+
+        document.getElementById('shop-settings-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            localStorage.setItem('shopSettings', JSON.stringify({
+                name: document.getElementById('ss-name').value.trim(),
+                email: document.getElementById('ss-email').value.trim(),
+                description: document.getElementById('ss-description').value.trim(),
+                processing: document.getElementById('ss-processing').value,
+                payout: document.getElementById('ss-payout').value,
+                vacation: document.getElementById('ss-vacation').checked
+            }));
+
+            showNotification('Shop settings saved', 'success');
+        });
+
+        // ---------- Init ----------
+        renderListings();
+        renderSellerOrders();
+        renderSellerReviews();
+        loadShopSettings();
+    </script>
+</body>
+</html>

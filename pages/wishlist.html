@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - CraftMarket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .wishlist-container {
+            padding: 40px 20px;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .empty-wishlist {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-wishlist i {
+            font-size: 60px;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="../index.html" class="logo-link">
+                        <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="../index.html" class="nav-link">Home</a>
+                    <a href="products.html" class="nav-link">Shop</a>
+                    <a href="seller-dashboard.html" class="nav-link">Sell</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="wishlist.html" class="icon-link active" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <section style="padding: 40px 20px; background-color: var(--light-bg); text-align: center;">
+        <h1 style="font-size: 32px; margin-bottom: 10px;">My Wishlist</h1>
+        <p style="color: var(--text-light);">Your favorite handcrafted items</p>
+    </section>
+
+    <!-- Wishlist Section -->
+    <div class="container">
+        <div class="wishlist-container">
+            <div class="wishlist-grid" id="wishlist-grid">
+                <!-- Wishlist items loaded by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="margin-top: 60px;">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link">
+                    <img src="../assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="seller-dashboard.html">Become a Seller</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script>
+        function loadWishlist() {
+            const container = document.getElementById('wishlist-grid');
+            const wishlist = getWishlist();
+            const wishlistProducts = products.filter(p => wishlist.includes(p.id));
+
+            if (wishlistProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-wishlist">
+                        <i class="fas fa-heart"></i>
+                        <h2>Your wishlist is empty</h2>
+                        <p>Start adding items to your wishlist</p>
+                        <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = wishlistProducts.map(p => createProductCard(p)).join('');
+            attachProductCardListeners();
+        }
+
+        // Initial load
+        loadWishlist();
+    </script>
+</body>
+</html>

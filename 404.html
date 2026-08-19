@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - CraftMarket</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar navbar-overlay">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <a href="index.html" class="logo-link">
+                        <img src="assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="logo-img">
+                    </a>
+                </div>
+                <nav class="nav-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="pages/products.html" class="nav-link">Shop</a>
+                    <a href="pages/seller-dashboard.html" class="nav-link">Sell</a>
+                    <a href="pages/services.html" class="nav-link">Services</a>
+                    <a href="pages/about.html" class="nav-link">About</a>
+                </nav>
+                <div class="nav-icons">
+                    <a href="pages/wishlist.html" class="icon-link" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </a>
+                    <a href="pages/cart.html" class="icon-link" title="Shopping Cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cart-count">0</span>
+                    </a>
+                    <a href="pages/account.html" class="icon-link" title="Account">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 404 Hero — same swiper mechanics as the homepage hero, four background videos -->
+    <section class="hero hero-video error-hero">
+        <video class="hero-video-bg active" data-slide="0" autoplay muted loop playsinline poster="assets/images/hero-poster.webp">
+            <source src="assets/videos/hero-pottery.mp4" type="video/mp4">
+        </video>
+        <video class="hero-video-bg" data-slide="1" muted loop playsinline poster="assets/images/hero-poster.webp">
+            <source src="assets/videos/hero-textiles.mp4" type="video/mp4">
+        </video>
+        <video class="hero-video-bg" data-slide="2" muted loop playsinline poster="assets/images/hero-poster.webp">
+            <source src="assets/videos/hero-jewelry.mp4" type="video/mp4">
+        </video>
+        <video class="hero-video-bg" data-slide="3" muted loop playsinline poster="assets/images/hero-poster.webp">
+            <source src="assets/videos/hero-woodwork.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay error-overlay"></div>
+
+        <div class="hero-content error-content">
+            <div class="hero-slide active" data-slide="0">
+                <p class="error-code">404</p>
+                <h1>This Piece Wasn't Made</h1>
+                <p>The page you're looking for doesn't exist — but our artisans have plenty that do.</p>
+            </div>
+            <div class="hero-slide" data-slide="1">
+                <p class="error-code">404</p>
+                <h1>Lost In The Loom</h1>
+                <p>That link led nowhere. Let's get you back to something handmade.</p>
+            </div>
+            <div class="hero-slide" data-slide="2">
+                <p class="error-code">404</p>
+                <h1>Not On The Shelf</h1>
+                <p>We couldn't find that page. It may have been moved or never existed.</p>
+            </div>
+            <div class="hero-slide" data-slide="3">
+                <p class="error-code">404</p>
+                <h1>Carved From Nothing</h1>
+                <p>Nothing to see here — head back and discover something real instead.</p>
+            </div>
+            <a href="index.html" class="btn btn-primary">Back to Home</a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo-link">
+                    <img src="assets/images/Stackly_logo_transparent.webp" alt="Stackly" class="footer-logo-img">
+                </a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>About CraftMarket</h4>
+                    <p>Supporting artisans worldwide by providing a platform for authentic handicrafts.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="pages/products.html">Shop</a></li>
+                        <li><a href="pages/seller-dashboard.html">Become a Seller</a></li>
+                        <li><a href="pages/about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="404.html" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="404.html" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="404.html" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="404.html" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CraftMarket. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
