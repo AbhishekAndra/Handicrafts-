@@ -433,7 +433,7 @@ const products = [
         reviews: 44,
         description: "Furnace-blown glass vase with organic bubbled texture, no two alike",
         in_stock: true,
-        featured: true
+        featured: false
     },
     {
         id: 30,
@@ -449,6 +449,96 @@ const products = [
         description: "Hand-cut and leaded stained glass piece, ready to hang in a sunny window",
         in_stock: true,
         featured: true
+    },
+    {
+        id: 31,
+        name: "Macrame Wall Hanging",
+        category: "textiles",
+        seller: "Loop & Fiber",
+        seller_id: 10,
+        price: 38.00,
+        original_price: 48.00,
+        image: "assets/images/products/p31-macrame-wall-hanging.webp",
+        rating: 4.7,
+        reviews: 29,
+        description: "Hand-knotted cotton cord wall hanging with a woven wood dowel",
+        in_stock: true,
+        featured: true
+    },
+    {
+        id: 32,
+        name: "Macrame Plant Hanger",
+        category: "textiles",
+        seller: "Loop & Fiber",
+        seller_id: 10,
+        price: 22.00,
+        original_price: 28.00,
+        image: "assets/images/products/p32-macrame-plant-hanger.webp",
+        rating: 4.8,
+        reviews: 23,
+        description: "Adjustable cotton rope plant hanger, hand-knotted in a classic diamond pattern",
+        in_stock: true,
+        featured: false
+    },
+    {
+        id: 33,
+        name: "Pressed Flower Candle",
+        category: "candles",
+        seller: "Petal Press Co.",
+        seller_id: 11,
+        price: 24.00,
+        original_price: 30.00,
+        image: "assets/images/products/p33-pressed-flower-candle.webp",
+        rating: 4.9,
+        reviews: 22,
+        description: "Soy wax candle embedded with real dried botanicals, poured by hand",
+        in_stock: true,
+        featured: true
+    },
+    {
+        id: 34,
+        name: "Lavender Botanical Candle Set",
+        category: "candles",
+        seller: "Petal Press Co.",
+        seller_id: 11,
+        price: 32.00,
+        original_price: 40.00,
+        image: "assets/images/products/p34-lavender-candle-set.webp",
+        rating: 4.8,
+        reviews: 19,
+        description: "Set of two lavender soy candles topped with pressed lavender buds",
+        in_stock: true,
+        featured: false
+    },
+    {
+        id: 35,
+        name: "Hand-Turned Wooden Bowl",
+        category: "woodwork",
+        seller: "Anvil & Oak",
+        seller_id: 12,
+        price: 48.00,
+        original_price: 60.00,
+        image: "assets/images/products/p35-turned-wooden-bowl.webp",
+        rating: 4.6,
+        reviews: 18,
+        description: "Lathe-turned bowl from a single piece of walnut, finished with food-safe oil",
+        in_stock: true,
+        featured: true
+    },
+    {
+        id: 36,
+        name: "Live-Edge Serving Board",
+        category: "woodwork",
+        seller: "Anvil & Oak",
+        seller_id: 12,
+        price: 36.00,
+        original_price: 45.00,
+        image: "assets/images/products/p36-live-edge-board.webp",
+        rating: 4.7,
+        reviews: 15,
+        description: "Live-edge maple serving board with a hand-carved handle",
+        in_stock: true,
+        featured: false
     }
 ];
 
@@ -458,6 +548,7 @@ const sellers = [
         id: 1,
         name: "Pottery Studio",
         avatar: "🏺",
+        image: "assets/images/sellers/pottery-studio.webp",
         rating: 4.8,
         reviews: 245,
         products: 15,
@@ -469,6 +560,7 @@ const sellers = [
         id: 2,
         name: "Textile Arts",
         avatar: "🧵",
+        image: "assets/images/sellers/textile-arts.webp",
         rating: 4.9,
         reviews: 189,
         products: 22,
@@ -480,6 +572,7 @@ const sellers = [
         id: 3,
         name: "Artisan Jewelry",
         avatar: "💎",
+        image: "assets/images/sellers/artisan-jewelry.webp",
         rating: 4.7,
         reviews: 312,
         products: 28,
@@ -491,6 +584,7 @@ const sellers = [
         id: 4,
         name: "Wood Masters",
         avatar: "🎨",
+        image: "assets/images/sellers/wood-masters.webp",
         rating: 4.6,
         reviews: 156,
         products: 18,
@@ -502,6 +596,7 @@ const sellers = [
         id: 5,
         name: "Hide & Stitch",
         avatar: "👜",
+        image: "assets/images/sellers/hide-and-stitch.webp",
         rating: 4.7,
         reviews: 132,
         products: 12,
@@ -513,6 +608,7 @@ const sellers = [
         id: 6,
         name: "Glow & Wick",
         avatar: "🕯️",
+        image: "assets/images/sellers/glow-and-wick.webp",
         rating: 4.9,
         reviews: 98,
         products: 10,
@@ -524,6 +620,7 @@ const sellers = [
         id: 7,
         name: "Hearth & Hammer",
         avatar: "🔨",
+        image: "assets/images/sellers/hearth-and-hammer.webp",
         rating: 4.7,
         reviews: 71,
         products: 14,
@@ -535,6 +632,7 @@ const sellers = [
         id: 8,
         name: "Reed & Rattan",
         avatar: "🧺",
+        image: "assets/images/sellers/reed-and-rattan.webp",
         rating: 4.8,
         reviews: 58,
         products: 16,
@@ -546,11 +644,48 @@ const sellers = [
         id: 9,
         name: "Ember Glassworks",
         avatar: "🔥",
+        image: "assets/images/sellers/ember-glassworks.webp",
         rating: 4.8,
         reviews: 64,
         products: 13,
         description: "Furnace-blown and leaded glass pieces, shaped while the glass is still molten",
         followers: 590,
+        verified: true
+    },
+    {
+        id: 10,
+        name: "Loop & Fiber",
+        avatar: "🪢",
+        image: "assets/images/sellers/loop-and-fiber.webp",
+        rating: 4.7,
+        reviews: 52,
+        products: 2,
+        description: "Macrame wall hangings and plant hangers, hand-knotted from natural cotton cord",
+        followers: 340,
+        verified: true
+    },
+    {
+        id: 11,
+        name: "Petal Press Co.",
+        avatar: "🌸",
+        image: "assets/images/sellers/petal-press.webp",
+        rating: 4.9,
+        reviews: 41,
+        products: 2,
+        description: "Botanical soy candles pressed with real dried flowers, poured in small batches",
+        followers: 410,
+        verified: true
+    },
+    {
+        id: 12,
+        name: "Anvil & Oak",
+        avatar: "🪵",
+        image: "assets/images/sellers/anvil-and-oak.webp",
+        rating: 4.6,
+        reviews: 33,
+        products: 2,
+        description: "Hand-turned wooden bowls and boards, finished with food-safe oils",
+        followers: 275,
         verified: true
     }
 ];
@@ -604,6 +739,15 @@ function productImageMarkup(item, className) {
 
     const cls = className ? ` class="${className}"` : '';
     return `<img src="${sitePath(item.image)}" alt="${item.name}" loading="lazy"${cls}>`;
+}
+
+// Renders a seller's `image` field as a real photo, falling back to the
+// `avatar` emoji when no photo is set.
+function sellerAvatarMarkup(seller, className) {
+    if (typeof seller.image !== 'string') return seller.avatar;
+
+    const cls = className ? ` class="${className}"` : '';
+    return `<img src="${sitePath(seller.image)}" alt="${seller.name}" loading="lazy"${cls}>`;
 }
 
 // Cart and Wishlist Management (LocalStorage)

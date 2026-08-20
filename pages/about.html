@@ -162,11 +162,14 @@
             height: 90px;
             border-radius: 50%;
             margin: 0 auto 15px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
+            overflow: hidden;
+        }
+
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .team-card h3 {
@@ -519,25 +522,25 @@
             <h2>The Team</h2>
             <div class="team-grid">
                 <div class="team-card">
-                    <div class="team-avatar">👩‍🎨</div>
+                    <div class="team-avatar"><img src="../assets/images/team/amara-okafor.webp" alt="Amara Okafor" loading="lazy"></div>
                     <h3>Amara Okafor</h3>
                     <div class="team-role">Founder</div>
                     <p>Third-generation weaver who wanted a fairer shop window for makers like her family.</p>
                 </div>
                 <div class="team-card">
-                    <div class="team-avatar">👨‍💻</div>
+                    <div class="team-avatar"><img src="../assets/images/team/rohan-iyer.webp" alt="Rohan Iyer" loading="lazy"></div>
                     <h3>Rohan Iyer</h3>
                     <div class="team-role">Head of Engineering</div>
                     <p>Builds the tools that let artisans run a shop without needing to be technical.</p>
                 </div>
                 <div class="team-card">
-                    <div class="team-avatar">👩‍🔧</div>
+                    <div class="team-avatar"><img src="../assets/images/team/sofia-marchetti.webp" alt="Sofia Marchetti" loading="lazy"></div>
                     <h3>Sofia Marchetti</h3>
                     <div class="team-role">Artisan Relations</div>
                     <p>Verifies every new seller and runs our apprenticeship grant programme.</p>
                 </div>
                 <div class="team-card">
-                    <div class="team-avatar">🧑‍💼</div>
+                    <div class="team-avatar"><img src="../assets/images/team/daniel-cruz.webp" alt="Daniel Cruz" loading="lazy"></div>
                     <h3>Daniel Cruz</h3>
                     <div class="team-role">Customer Care</div>
                     <p>Answers your emails — usually within a few hours, always personally.</p>

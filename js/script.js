@@ -68,7 +68,7 @@ function createProductCard(product) {
 function createSellerCard(seller) {
     return `
         <div class="seller-card">
-            <div class="seller-avatar">${seller.avatar}</div>
+            <div class="seller-avatar">${sellerAvatarMarkup(seller)}</div>
             <div class="seller-name">${seller.name} ${seller.verified ? '<i class="fas fa-check-circle" style="color: var(--success-color); font-size: 14px;"></i>' : ''}</div>
             <div class="seller-info">${seller.description}</div>
             <div class="seller-stats">
