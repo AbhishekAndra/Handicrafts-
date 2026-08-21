@@ -330,6 +330,48 @@ function setupHeroSlider() {
     startAutoplay();
 }
 
+function setupMobileMenu() {
+    const toggle = document.getElementById('menuToggle');
+    const menu = document.getElementById('navMenu');
+
+    if (!toggle || !menu) return;
+
+    const closeMenu = () => {
+        toggle.classList.remove('active');
+        menu.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = menu.classList.toggle('active');
+        toggle.classList.toggle('active', isOpen);
+        toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Close when a nav link is chosen
+    menu.querySelectorAll('.nav-link').forEach((link) => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!menu.classList.contains('active')) return;
+        if (menu.contains(e.target) || toggle.contains(e.target)) return;
+        closeMenu();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu();
+    });
+
+    // Reset state if the viewport grows back to desktop
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) closeMenu();
+    });
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadFeaturedProducts();
@@ -337,4 +379,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSearch();
     setupNewsletter();
     setupHeroSlider();
+    setupMobileMenu();
 });

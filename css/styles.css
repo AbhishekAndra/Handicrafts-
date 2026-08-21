@@ -288,6 +288,57 @@ body {
     font-weight: bold;
 }
 
+/* ============ HAMBURGER MENU TOGGLE ============ */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.menu-toggle:hover {
+    background-color: var(--light-bg);
+}
+
+.navbar-overlay .menu-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.menu-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-dark);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-overlay .menu-toggle-bar {
+    background-color: var(--white);
+}
+
+/* Morph into an X when the menu is open */
+.menu-toggle.active .menu-toggle-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.menu-toggle.active .menu-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active .menu-toggle-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ============ HERO SECTION ============ */
 .hero {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -1172,8 +1223,62 @@ body {
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+        order: 3;
+    }
+
+    .navbar-content {
+        flex-wrap: wrap;
+    }
+
+    .nav-icons {
+        order: 2;
+        margin-left: auto;
+    }
+
     .nav-menu {
-        gap: 15px;
+        order: 4;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        margin-top: 0;
+        transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.3s ease;
+    }
+
+    .nav-menu.active {
+        max-height: 400px;
+        opacity: 1;
+        margin-top: 18px;
+    }
+
+    .nav-menu .nav-link {
+        width: 100%;
+        padding: 12px 4px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .navbar-overlay .nav-menu {
+        background: rgba(20, 14, 8, 0.55);
+        backdrop-filter: blur(12px) saturate(160%);
+        -webkit-backdrop-filter: blur(12px) saturate(160%);
+        border-radius: var(--radius-lg);
+    }
+
+    .navbar-overlay .nav-menu.active {
+        padding: 4px 14px;
+    }
+
+    .navbar-overlay .nav-menu .nav-link {
+        border-top-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .nav-menu .nav-link::after {
+        display: none;
     }
 
     .hero h1 {
@@ -1202,17 +1307,6 @@ body {
 }
 
 @media (max-width: 480px) {
-    .navbar-content {
-        flex-wrap: wrap;
-    }
-
-    .nav-menu {
-        order: 3;
-        width: 100%;
-        gap: 15px;
-        margin-top: 15px;
-    }
-
     .hero h1 {
         font-size: 24px;
     }
